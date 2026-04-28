@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Pour Joséphine ❤️</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: #0a0005;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ─── PAGES ─── */
+    .page {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .page.out {
+      opacity: 0;
+      transform: scale(0.96);
+      pointer-events: none;
+    }
+    .page.hidden {
+      display: none;
+    }
+
+    /* ─────────────────────────────────────────
+       PAGE 1 : TICKET À GRATTER
+    ───────────────────────────────────────── */
+    #page-ticket {
+      background: radial-gradient(ellipse at center, #1c0510 0%, #080005 100%);
+    }
+
+    .ticket-wrap {
+      width: min(480px, 92vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ticket-label {
+      font-family: 'Playfair Display', serif;
+      color: #f0c8d8;
+      font-size: clamp(0.7em, 2.5vw, 0.85em);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .ticket {
+      width: 100%;
+      background: linear-gradient(145deg, #fdf0e8 0%, #fce8f0 40%, #fdf0e8 100%);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(200,120,140,0.4),
+        0 0 0 4px rgba(200,120,140,0.1),
+        0 25px 60px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      position: relative;
+    }
+
+    /* Déco top du ticket */
+    .ticket-top {
+      background: linear-gradient(135deg, #c04060 0%, #8b1530 50%, #c04060 100%);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ticket-top-title {
+      font-family: 'Playfair Display', serif;
+      color: #ffe8f0;
+      font-size: clamp(1em, 4vw, 1.3em);
+      font-style: italic;
+    }
+    .ticket-top-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      color: #ffe8f0;
+      font-size: 0.75em;
+      letter-spacing: 2px;
+    }
+
+    /* Zone de grattage */
+    .scratch-zone {
+      position: relative;
+      margin: 0;
+    }
+
+    #scratch-text {
+      padding: 20px 22px;
+      font-size: clamp(0.78em, 2.2vw, 0.9em);
+      line-height: 1.9;
+      color: #3a1525;
+      white-space: pre-wrap;
+      background: #fff8f2;
+      max-height: 52vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #d4a0b0 transparent;
+    }
+
+    #scratch-canvas {
+      position: absolute;
+      inset: 0;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    /* Bas du ticket */
+    .ticket-bottom {
+      padding: 10px 20px;
+      background: linear-gradient(to right, #f8e0ec, #fce8f0, #f8e0ec);
+      border-top: 1px dashed rgba(180,100,130,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .ticket-serial {
+      font-size: 0.7em;
+      color: #b08090;
+      letter-spacing: 2px;
+    }
+
+    /* Hint animé */
+    .hint {
+      color: #e8a0c0;
+      font-size: clamp(0.75em, 2.5vw, 0.85em);
+      letter-spacing: 2px;
+      animation: blink 2.2s ease-in-out infinite;
+      font-style: italic;
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Bouton continuer */
+    #continue-btn {
+      display: none;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #c84060 0%, #902040 100%);
+      color: #fff8f0;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(0.9em, 3vw, 1.05em);
+      font-style: italic;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(180,50,80,0.5);
+      animation: pulse-btn 2s ease-in-out infinite;
+      transition: transform 0.15s ease;
+    }
+    #continue-btn:hover { transform: scale(1.02); }
+    @keyframes pulse-btn {
+      0%,100% { box-shadow: 0 8px 25px rgba(180,50,80,0.5); }
+      50% { box-shadow: 0 8px 40px rgba(200,64,100,0.8); }
+    }
+
+    /* ─────────────────────────────────────────
+       PAGE 2 : POÈME
+    ───────────────────────────────────────── */
+    #page-poem {
+      background: #05020f;
+      overflow: hidden;
+    }
+
+    /* Lumières disco en fond */
+    .disco-light {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(90px);
+      opacity: 0;
+      transition: opacity 1.5s ease;
+    }
+    #page-poem:not(.hidden) .disco-light { opacity: 0.12; }
+
+    .dl1 { width: 400px; height: 400px; background: #cc00ff; top: -100px; left: -100px; animation: drift1 9s ease-in-out infinite alternate; }
+    .dl2 { width: 350px; height: 350px; background: #0088ff; bottom: -80px; right: -80px; animation: drift2 11s ease-in-out infinite alternate; }
+    .dl3 { width: 280px; height: 280px; background: #ff4400; top: 40%; left: 60%; animation: drift3 13s ease-in-out infinite alternate; }
+    .dl4 { width: 200px; height: 200px; background: #ff0066; bottom: 20%; left: 5%; animation: drift1 7s ease-in-out infinite alternate-reverse; }
+
+    @keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(40px, 30px); } }
+    @keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-30px, 40px); } }
+    @keyframes drift3 { from { transform: translate(0,0); } to { transform: translate(-50px, -20px); } }
+
+    /* Contenu poème */
+    .poem-scroll {
+      position: relative;
+      z-index: 10;
+      width: min(560px, 92vw);
+      max-height: 100vh;
+      overflow-y: auto;
+      padding: 50px 20px 60px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .poem-scroll::-webkit-scrollbar { display: none; }
+
+    .poem-title {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      font-size: clamp(2.5em, 10vw, 4em);
+      letter-spacing: 14px;
+      text-align: center;
+      margin-bottom: 55px;
+      opacity: 0;
+      transform: translateY(-15px);
+      text-shadow: 0 0 40px rgba(180,80,255,0.7), 0 0 80px rgba(180,80,255,0.3);
+    }
+    .poem-title.in {
+      animation: titleIn 1.2s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+    @keyframes titleIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stanza {
+      text-align: center;
+      margin: 0 0 50px;
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+    }
+    .stanza.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .stanza p {
+      font-style: italic;
+      color: #e8d5f5;
+      font-size: clamp(0.95em, 3vw, 1.1em);
+      line-height: 2.1;
+      text-shadow: 0 0 20px rgba(200,150,255,0.25);
+    }
+    .stanza-sep {
+      width: 30px;
+      height: 1px;
+      background: rgba(200,150,255,0.3);
+      margin: 0 auto 50px;
+      opacity: 0;
+      transition: opacity 0.6s ease 0.3s;
+    }
+    .stanza-sep.in { opacity: 1; }
+
+    /* Clic hint */
+    #poem-hint {
+      text-align: center;
+      color: rgba(200,150,255,0.5);
+      font-style: italic;
+      font-size: clamp(0.75em, 2.5vw, 0.85em);
+      letter-spacing: 2px;
+      margin-top: 10px;
+      animation: blink 2.5s ease-in-out infinite;
+    }
+
+    /* Message final */
+    #final-msg {
+      text-align: center;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      padding: 30px 0 10px;
+    }
+    #final-msg.in {
+      opacity: 1;
+      transform: scale(1);
+    }
+    #final-msg .final-heart {
+      font-size: 2.5em;
+      display: block;
+      margin-bottom: 12px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    @keyframes heartbeat {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    #final-msg .final-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: #f0b0c8;
+      font-size: clamp(1em, 3.5vw, 1.25em);
+      text-shadow: 0 0 30px rgba(240,80,120,0.5);
+    }
+
+    /* ─── PÉTALES / PARTICULES ─── */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      animation: floatUp 2.8s ease forwards;
+    }
+    @keyframes floatUp {
+      0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translateY(-220px) rotate(30deg) scale(0.4); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     PAGE 1 : TICKET À GRATTER
+══════════════════════════════ -->
+<div id="page-ticket" class="page">
+  <div class="ticket-wrap">
+    <div class="ticket-label">✦ 1 mois ✦</div>
+
+    <div class="ticket">
+      <div class="ticket-top">
+        <span class="ticket-top-title">Pour Joséphine</span>
+        <span class="ticket-top-badge">❤️</span>
+      </div>
+
+      <div class="scratch-zone" id="scratch-zone">
+        <div id="scratch-text">Ma josé,
+
+Dans ma vie, certains trajets m'ont marqué. Lorsque je roulais en voiture sur les bancs de sable blanc en Argentine, ou encore dans les plus beaux paysages de montagnes rouges.
+Mais je crois que le plus beau trajet de ma vie, le plus émouvant, a été celui de ce week-end.
+C'est à la fois le pire et le plus beau trajet de ma vie, je n'ai jamais ressenti un amour aussi fort pour qui que ce soit à cet instant présent.
+J'avais l'impression d'être parfaitement connecté à toi. Je n'avais plus aucun doute, je savais que je te voulais pour la vie. Ton regard m'a tellement fait d'effet, mes mains sur tes cuisses... je me sentais parfaitement connecté avec toi.
+Alors voilà, t'es parti pour 2 mois, et je compte déjà les jours. Mais je suis convaincu d'une chose, c'est que je veux t'attendre et que je suis prêt à faire 1 millier d'efforts pour que ça se passe au mieux.
+Ce n'est pas des belles paroles, je le dis à tout le monde parce que j'en suis convaincu.
+Hier quand t'as posté la story j'étais tellement content, j'ai dit à Santo, Rayan et Alex : abonnez-vous à Josy, regardez sa story, j'étais tout fier.
+Sincèrement, Joséphine, t'es la première personne à qui j'ai envie de présenter tous mes potes, tout le monde me dit qu'on est fait pour être ensemble et qu'on match hyper bien et c'est vrai.
+Mon bébé est parti 2 mois et il ne me reste plus que Nana pour penser à elle. Alors sache que je t'aime, que je suis tellement heureux que tu sois venue à ce brunch focus. Je suis tellement heureux de t'avoir rencontré.
+Au final, notre rencontre a eu lieu grâce à Lilian, et n'oublions pas qu'il était prêtre de mariage dans la capsule...
+Habituellement, j'ai un mécanisme de défense qui fait que je m'empêche d'aimer à 100% une personne. Mais il y a beau avoir 7 mois de distance qui vont nous tomber dessus, je n'ai qu'une seule envie c'est d'y croire comme si t'étais la femme de ma vie.
+
+Je t'aime Joséphine, joyeux 1 mois, profite de ce voyage à fond, aime-moi et je t'aimerai pour toujours.</div>
+        <canvas id="scratch-canvas"></canvas>
+      </div>
+
+      <div class="ticket-bottom">
+        <span class="ticket-serial">Pour toi ma Josy</span>
+      </div>
+    </div>
+
+    <div class="hint" id="scratch-hint">✦ gratte pour lire ton message ✦</div>
+    <button id="continue-btn" onclick="goToPoem()">Lire mon poème pour toi &nbsp;→</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     PAGE 2 : POÈME CRA
+══════════════════════════════ -->
+<div id="page-poem" class="page hidden">
+
+  <!-- Lumières -->
+  <div class="disco-light dl1"></div>
+  <div class="disco-light dl2"></div>
+  <div class="disco-light dl3"></div>
+  <div class="disco-light dl4"></div>
+
+  <div class="poem-scroll" id="poem-scroll">
+
+    <h1 class="poem-title" id="poem-title">CRA</h1>
+
+    <div class="stanza" id="s0">
+      <p>La foule était grande, et la musique trop forte</p>
+      <p>Sous les lumières de cette salle brillaient déjà tes yeux</p>
+      <p>Mon corps vacille au milieu de cette cohorte</p>
+      <p>Oh, comme j'aspire à toujours être perdu dans ces yeux.</p>
+    </div>
+    <div class="stanza-sep" id="sep0"></div>
+
+    <div class="stanza" id="s1">
+      <p>On se cachait dans un chiffre à sept</p>
+      <p>Un code entre nous, discret et secret</p>
+      <p>Mais ce soir là, notre monde n'était plus privé</p>
+      <p>Sous les regards, notre histoire s'est dévoilée</p>
+    </div>
+    <div class="stanza-sep" id="sep1"></div>
+
+    <div class="stanza" id="s2">
+      <p>L'alcool et l'amour s'entremêlent alors,</p>
+      <p>Me font oublier pourquoi j'avais peur d'aimer</p>
+      <p>Mais toi tu danses encore sans me lâcher</p>
+      <p>Comme si le dernier jour du disco ne voulait pas s'en aller</p>
+    </div>
+
+    <p id="poem-hint">✦ appuie pour découvrir la suite ✦</p>
+
+    <div id="final-msg">
+      <span class="final-heart">❤️</span>
+      <span class="final-text">Joyeux 1 mois, Joséphine.</span>
+    </div>
+
+  </div><!-- /poem-scroll -->
+
+  <!-- Conteneur particules -->
+  <div id="particles"></div>
+</div>
+
+
+<script>
+/* ═══════════════════════════════════════
+   SCRATCH CARD
+═══════════════════════════════════════ */
+const canvas  = document.getElementById('scratch-canvas');
+const ctx     = canvas.getContext('2d');
+const zone    = document.getElementById('scratch-zone');
+const textEl  = document.getElementById('scratch-text');
+let painting  = false;
+let done      = false;
+
+function buildCanvas() {
+  const r = textEl.getBoundingClientRect();
+  canvas.width  = r.width;
+  canvas.height = r.height;
+  canvas.style.width  = r.width  + 'px';
+  canvas.style.height = r.height + 'px';
+
+  /* Fond doré */
+  const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  g.addColorStop(0,   '#b8732a');
+  g.addColorStop(0.3, '#e8b84a');
+  g.addColorStop(0.5, '#f5d870');
+  g.addColorStop(0.7, '#e8b84a');
+  g.addColorStop(1,   '#b8732a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  /* Étoiles pailletées */
+  ctx.fillStyle = 'rgba(255,255,220,0.18)';
+  for (let i = 0; i < 260; i++) {
+    ctx.beginPath();
+    ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  /* Texte central de la zone */
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(90, 40, 10, 0.65)';
+  ctx.font = `bold ${Math.max(14, canvas.width * 0.04)}px "Cormorant Garamond", Georgia, serif`;
+  ctx.fillText('✦  Gratte pour lire ton message  ✦', canvas.width / 2, canvas.height / 2);
+}
+
+function scratchAt(x, y) {
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath();
+  ctx.arc(x, y, 28, 0, Math.PI * 2);
+  ctx.fill();
+  checkReveal();
+}
+
+function checkReveal() {
+  if (done) return;
+  const d = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  let transparent = 0;
+  for (let i = 3; i < d.length; i += 4) { if (d[i] < 128) transparent++; }
+  if (transparent / (d.length / 4) > 0.52) fullyReveal();
+}
+
+function fullyReveal() {
+  done = true;
+  canvas.style.transition = 'opacity 0.6s ease';
+  canvas.style.opacity = '0';
+  document.getElementById('scratch-hint').style.display = 'none';
+  setTimeout(() => {
+    canvas.style.display = 'none';
+    const btn = document.getElementById('continue-btn');
+    btn.style.display = 'block';
+  }, 600);
+}
+
+function pos(e) {
+  const r = canvas.getBoundingClientRect();
+  const sx = canvas.width  / r.width;
+  const sy = canvas.height / r.height;
+  const src = e.touches ? e.touches[0] : e;
+  return { x: (src.clientX - r.left) * sx, y: (src.clientY - r.top) * sy };
+}
+
+canvas.addEventListener('mousedown',  e => { painting = true; const p = pos(e); scratchAt(p.x, p.y); });
+canvas.addEventListener('mousemove',  e => { if (!painting) return; const p = pos(e); scratchAt(p.x, p.y); });
+canvas.addEventListener('mouseup',    () => painting = false);
+canvas.addEventListener('mouseleave', () => painting = false);
+
+canvas.addEventListener('touchstart', e => { e.preventDefault(); painting = true; const p = pos(e); scratchAt(p.x, p.y); }, { passive: false });
+canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (!painting) return; const p = pos(e); scratchAt(p.x, p.y); }, { passive: false });
+canvas.addEventListener('touchend',   () => painting = false);
+
+window.addEventListener('load',   buildCanvas);
+window.addEventListener('resize', buildCanvas);
+
+
+/* ═══════════════════════════════════════
+   TRANSITION → POÈME
+═══════════════════════════════════════ */
+function goToPoem() {
+  const t = document.getElementById('page-ticket');
+  t.classList.add('out');
+  setTimeout(() => {
+    t.classList.add('hidden');
+    const p = document.getElementById('page-poem');
+    p.classList.remove('hidden');
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        document.getElementById('poem-title').classList.add('in');
+        /* 1re strophe auto */
+        setTimeout(() => { revealNext(); }, 900);
+      }, 60);
+    });
+  }, 900);
+}
+
+
+/* ═══════════════════════════════════════
+   POÈME – RÉVÉLATION AU CLIC
+═══════════════════════════════════════ */
+const stanzaIds = ['s0','s1','s2'];
+const sepIds    = ['sep0','sep1'];
+let step = 0; /* 0 = title shown, first stanza auto-reveals, then click */
+
+function revealNext() {
+  if (step >= stanzaIds.length) return;
+  const el = document.getElementById(stanzaIds[step]);
+  el.classList.add('in');
+  if (step < sepIds.length) {
+    const sep = document.getElementById(sepIds[step]);
+    setTimeout(() => sep.classList.add('in'), 400);
+  }
+  step++;
+  /* scroll smooth */
+  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+
+  spawn(6);
+
+  if (step >= stanzaIds.length) {
+    /* tout révélé → message final */
+    document.getElementById('poem-hint').style.display = 'none';
+    setTimeout(() => {
+      const fin = document.getElementById('final-msg');
+      fin.classList.add('in');
+      fin.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      spawn(28);
+    }, 900);
+  }
+}
+
+document.getElementById('page-poem').addEventListener('click', () => {
+  if (step > 0 && step < stanzaIds.length) revealNext();
+});
+
+
+/* ═══════════════════════════════════════
+   PARTICULES
+═══════════════════════════════════════ */
+const EMOJIS = ['❤️','💕','✨','💫','🌹','💖','🌸'];
+
+function spawn(n) {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'particle';
+      el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+      el.style.cssText = `
+        left: ${Math.random() * 100}vw;
+        bottom: ${10 + Math.random() * 30}vh;
+        font-size: ${0.9 + Math.random() * 1.4}em;
+        animation-delay: ${Math.random() * 0.4}s;
+        animation-duration: ${2 + Math.random() * 1.5}s;
+      `;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }, i * 90);
+  }
+}
+</script>
+
+</body>
+</html>
